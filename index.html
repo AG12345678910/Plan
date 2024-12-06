@@ -26,15 +26,101 @@
             <iframe src="https://www.patriots.com" width="100%" height="600px"></iframe>
         </div>
 
-        <!-- Crossy Road Game -->
-        <div id="game">
-            <h2>Play Crossy Road</h2>
-            <iframe src="https://www.crazygames.com/game/crossy-road" width="800" height="600"></iframe>
-        </div>
-    </div>
+       <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crossy Road Clone</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <script>
+        // Create the game scene
+        const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
 
-    <script src="script.js"></script>
-</body>
-</html>
+        const game = new Phaser.Game(config);
+        let player;
+        let cursors;
+        let carGroup;
+
+        // Preload assets
+        function preload() {
+            this.load.image('player', 'https://examples.phaser.io/assets/sprites/phaser-dude.png'); // Character
+            this.load.image('car', 'https://examples.phaser.io/assets/sprites/car.png'); // Car
+        }
+
+        // Create the game scene
+        function create() {
+            // Add the player sprite
+            player = this.physics.add.sprite(400, 500, 'player').setOrigin(0.5, 0.5);
+
+            // Add cars (obstacles)
+            carGroup = this.physics.add.group();
+
+            // Add movement controls
+            cursors = this.input.keyboard.createCursorKeys();
+
+            // Create a simple car (could spawn more and set movement)
+            this.time.addEvent({
+                delay: 1000,
+                callback: createCar,
+                callbackScope: this,
+                loop: true
+            });
+        }
+
+        // Update the game scene
+        function update() {
+            // Player movement controls
+            if (cursors.left.isDown) {
+                player.setVelocityX(-160);
+            } else if (cursors.right.isDown) {
+                player.setVelocityX(160);
+            } else {
+                player.setVelocityX(0);
+            }
+
+            if (cursors.up.isDown) {
+                player.setVelocityY(-160);
+            } else if (cursors.down.isDown) {
+                player.setVelocityY(160);
+            } else {
+                player.setVelocityY(0);
+            }
+
+            // Check for collisions with cars
+            this.physics.overlap(player, carGroup, hitCar, null, this);
+        }
+
+        // Function to create a new car
+        function createCar() {
+            let car = carGroup.create(Phaser.Math.Between(0, 800), 0, 'car');
+            car.setVelocityY(100);
+            car.setCollideWorldBounds(true);
+            car.setBounce(1);
+        }
+
+        // Handle collision between player and car
+        function hitCar(player, car) {
+            // Restart the game or handle the collision (e.g., player dies)
+            alert('Game Over!');
+            player.setPosition(400, 500);
+            carGroup.clear(true, true);
+        }
+    </script>
 </body>
 </html>
