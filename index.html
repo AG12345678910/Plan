@@ -1,1 +1,122 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: Arial, sans-serif;
+    background: url('https://www.w3schools.com/w3images/palm.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+}
+
+h1, h2, h3 {
+    margin-bottom: 20px;
+}
+
+#countdown {
+    font-size: 2em;
+    margin-bottom: 50px;
+}
+
+#calendar {
+    margin-bottom: 50px;
+}
+
+#patriots {
+    margin-bottom: 50px;
+}
+
+iframe {
+    border: none;
+    width: 100%;
+    height: 400px;
+}
+
+a {
+    color: #00f;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+3. scripts.js - JavaScript for Countdown and Calendar
+javascript
+Copy code
+// Countdown Timer to May 31, 2025
+function startCountdown() {
+    const targetDate = new Date("May 31, 2025 00:00:00").getTime();
+    const timer = document.getElementById("timer");
+
+    setInterval(function() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        timer.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+        if (distance < 0) {
+            clearInterval();
+            timer.innerHTML = "EXPIRED";
+        }
+    }, 1000);
+}
+
+startCountdown();
+
+// Create a basic calendar (optional feature)
+function createCalendar() {
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+
+    let calendarHTML = `<table>
+        <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+        </tr>
+        <tr>`;
+
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < firstDay.getDay(); i++) {
+        calendarHTML += "<td></td>";
+    }
+
+    // Add the days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+        if ((firstDay.getDay() + day - 1) % 7 === 0 && day !== 1) {
+            calendarHTML += "</tr><tr>";
+        }
+        calendarHTML += `<td>${day}</td>`;
+    }
+
+    // Add empty cells for days after the last day of the month
+    for (let i = (firstDay.getDay() + daysInMonth) % 7; i < 7; i++) {
+        calendarHTML += "<td></td>";
+    }
+
+    calendarHTML += "</tr></table>";
+    document.getElementById("calendarContainer").innerHTML = calendarHTML;
+}
+
+createCalendar();
