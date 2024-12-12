@@ -1,164 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Palm Tree Adventure</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunshine Time</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <header>
+        <h1>Welcome to Sunshine Time</h1>
+        <div class="palm-tree">
+            🌴
+        </div>
+    </header>
 
-  <!-- Background with Palm Trees -->
-  <div class="background">
-    <!-- Website title -->
-    <div class="title">
-      <h1>Palm Tree Adventure</h1>
-    </div>
+    <section class="calendar">
+        <h2>Palm Tree Calendar</h2>
+        <div id="calendar"></div>
+    </section>
 
-    <!-- Full Calendar Section -->
-    <div class="calendar-section">
-      <div class="calendar-container">
-        <iframe src="https://calendar.google.com/calendar/embed?src=your_calendar_id_here&ctz=America%2FNew_York" 
-                style="border: 0" 
-                width="800" 
-                height="600" 
-                frameborder="0" 
-                scrolling="no">
-        </iframe>
-      </div>
+    <section class="pong-game">
+        <h2>Pong Game</h2>
+        <div id="pong-container"></div>
+    </section>
 
-      <!-- Palm Trees Sidebar -->
-      <div class="palm-tree-sidebar">
-        <img src="https://images.unsplash.com/photo-1517637282173-5517a25873eb" alt="Palm Tree" class="palm-image">
-      </div>
-    </div>
-
-    <!-- Pong Game Section -->
-    <div class="pong-game">
-      <canvas id="pongCanvas" width="800" height="400"></canvas>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
-
+    <script src="calendar.js"></script>
+    <script src="pong.js"></script>
 </body>
 </html>
-/* General body styling */
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: white;
-  text-align: center;
+    font-family: Arial, sans-serif;
+    background-color: #ffecb3;
+    color: #2e7d32;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
-.background {
-  background-image: url('https://images.unsplash.com/photo-1490914307340-1f6364b19b76'); /* Palm tree background */
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+header {
+    background-color: #ff9800;
+    padding: 20px;
 }
 
-.title {
-  margin-top: 50px;
-  font-size: 3em;
-  font-weight: bold;
+h1 {
+    font-size: 36px;
 }
 
-.calendar-section {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 50px;
-  padding: 20px;
+.palm-tree {
+    font-size: 80px;
 }
 
-.calendar-container {
-  flex: 1;
+h2 {
+    color: #f44336;
 }
 
-.palm-tree-sidebar {
-  flex: 0.3;
-  padding-left: 20px;
-}
-
-.palm-image {
-  width: 100%;
-  border-radius: 10px;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+.calendar {
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .pong-game {
-  margin-top: 50px;
-  padding: 20px;
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-(function() {
-  const canvas = document.getElementById("pongCanvas");
-  const ctx = canvas.getContext("2d");
+// Simple JavaScript Calendar
+const calendarDiv = document.getElementById('calendar');
+const date = new Date();
+const month = date.getMonth();
+const year = date.getFullYear();
 
-  // Define the game variables
-  const paddleWidth = 10, paddleHeight = 100, ballRadius = 10;
-  let ballX = canvas.width / 2, ballY = canvas.height / 2;
-  let ballSpeedX = 5, ballSpeedY = 5;
-  let leftPaddleY = (canvas.height - paddleHeight) / 2;
-  let rightPaddleY = (canvas.height - paddleHeight) / 2;
-  let leftPaddleSpeed = 0, rightPaddleSpeed = 5;
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-  // Set up mouse movement to control the left paddle
-  document.addEventListener("mousemove", function(event) {
-    const mousePos = event.clientY - canvas.offsetTop;
-    leftPaddleY = mousePos - paddleHeight / 2;
-  });
+function renderCalendar(month, year) {
+    const firstDay = new Date(year, month).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+    let calendarHTML = `<h3>${months[month]} ${year}</h3><table><tr>`;
 
-  // Draw everything to the canvas
-  function draw() {
-    // Clear the canvas and draw background
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < 7; i++) {
+        calendarHTML += `<th>${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i]}</th>`;
+    }
 
-    // Draw paddles
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
-    ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+    calendarHTML += `</tr><tr>`;
 
-    // Draw the ball
+    for (let i = 0; i < firstDay; i++) {
+        calendarHTML += `<td></td>`;
+    }
+
+    for (let day = 1; day <= lastDate; day++) {
+        if ((firstDay + day - 1) % 7 === 0 && day !== 1) {
+            calendarHTML += `</tr><tr>`;
+        }
+        calendarHTML += `<td>${day}</td>`;
+    }
+
+    calendarHTML += `</tr></table>`;
+    calendarDiv.innerHTML = calendarHTML;
+}
+
+renderCalendar(month, year);
+// Simple Pong Game in JavaScript
+const canvas = document.createElement('canvas');
+canvas.width = 600;
+canvas.height = 400;
+document.getElementById('pong-container').appendChild(canvas);
+const ctx = canvas.getContext('2d');
+
+// Paddle
+const paddleWidth = 10, paddleHeight = 100;
+const leftPaddle = { x: 0, y: canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 4 };
+const rightPaddle = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 4 };
+
+// Ball
+const ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 10, speedX: 4, speedY: 4 };
+
+function drawPaddle(paddle) {
+    ctx.fillStyle = "#4caf50";
+    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+}
+
+function drawBall() {
     ctx.beginPath();
-    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2, false);
-    ctx.fillStyle = "white";
+    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#ff9800";
     ctx.fill();
     ctx.closePath();
+}
 
-    // Ball movement
-    ballX += ballSpeedX;
-    ballY += ballSpeedY;
+function movePaddles() {
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "ArrowUp" && rightPaddle.y > 0) {
+            rightPaddle.y -= rightPaddle.dy;
+        } else if (e.key === "ArrowDown" && rightPaddle.y < canvas.height - paddleHeight) {
+            rightPaddle.y += rightPaddle.dy;
+        } else if (e.key === "w" && leftPaddle.y > 0) {
+            leftPaddle.y -= leftPaddle.dy;
+        } else if (e.key === "s" && leftPaddle.y < canvas.height - paddleHeight) {
+            leftPaddle.y += leftPaddle.dy;
+        }
+    });
+}
 
-    // Ball collision with top and bottom
-    if (ballY + ballSpeedY < ballRadius || ballY + ballSpeedY > canvas.height - ballRadius) {
-      ballSpeedY = -ballSpeedY;
+function updateBall() {
+    ball.x += ball.speedX;
+    ball.y += ball.speedY;
+
+    if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
+        ball.speedY = -ball.speedY;
     }
 
-    // Ball collision with paddles
-    if (ballX + ballSpeedX < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight ||
-        ballX + ballSpeedX > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
-      ballSpeedX = -ballSpeedX;
+    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+        ball.x = canvas.width / 2;
+        ball.y = canvas.height / 2;
     }
 
-    // Ball reset if it goes out of bounds
-    if (ballX + ballSpeedX < 0 || ballX + ballSpeedX > canvas.width) {
-      ballX = canvas.width / 2;
-      ballY = canvas.height / 2;
-      ballSpeedX = -ballSpeedX;
+    if (ball.x - ball.radius < leftPaddle.x + leftPaddle.width && ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.height) {
+        ball.speedX = -ball.speedX;
     }
 
-    // Computer paddle AI
-    const computerPaddleSpeed = 5;
-    if (rightPaddleY + paddleHeight / 2 < ballY) {
-      rightPaddleY += computerPaddleSpeed;
-    } else {
-      rightPaddleY -= computerPaddleSpeed;
+    if (ball.x + ball.radius > rightPaddle.x && ball.y > rightPaddle.y && ball.y < rightPaddle.y + rightPaddle.height) {
+        ball.speedX = -ball.speedX;
     }
-  }
+}
 
-  setInterval(draw, 1000 / 60);
-})();
+function gameLoop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawPaddle(leftPaddle);
+    drawPaddle(rightPaddle);
+    drawBall();
+    movePaddles();
+    updateBall();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+git add .
+git commit -m "Initial commit"
+git push origin main
