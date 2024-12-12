@@ -3,85 +3,174 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdown Timer Website</title>
+  <title>Palm Tree Adventure</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <!-- Background with Palm Trees -->
   <div class="background">
-    <div class="container">
-      <!-- Countdown Timer Section -->
-      <div class="countdown">
-        <h1>Countdown to May 31, 2024</h1>
-        <div id="timer">
-          <span id="days"></span> days
-          <span id="hours"></span> hours
-          <span id="minutes"></span> minutes
-          <span id="seconds"></span> seconds
-        </div>
-      </div>
-      
-      <!-- Patriots Website Link -->
-      <div class="patriots-link">
-        <a href="https://www.patriots.com" target="_blank">Visit the Patriots Official Website</a>
+    <!-- Website title -->
+    <div class="title">
+      <h1>Palm Tree Adventure</h1>
+    </div>
+
+    <!-- Full Calendar Section -->
+    <div class="calendar-section">
+      <div class="calendar-container">
+        <iframe src="https://calendar.google.com/calendar/embed?src=your_calendar_id_here&ctz=America%2FNew_York" 
+                style="border: 0" 
+                width="800" 
+                height="600" 
+                frameborder="0" 
+                scrolling="no">
+        </iframe>
       </div>
 
-      <!-- Pong Game Section -->
-      <div class="pong-game" id="pong">
-        <!-- Pong game will be embedded here -->
+      <!-- Palm Trees Sidebar -->
+      <div class="palm-tree-sidebar">
+        <img src="https://images.unsplash.com/photo-1517637282173-5517a25873eb" alt="Palm Tree" class="palm-image">
       </div>
+    </div>
+
+    <!-- Hawaiian Music -->
+    <audio id="hawaiian-music" autoplay loop>
+      <source src="hawaiian-music.mp3" type="audio/mpeg">
+      Your browser does not support the audio tag.
+    </audio>
+
+    <!-- Pong Game Section -->
+    <div class="pong-game">
+      <canvas id="pongCanvas" width="800" height="400"></canvas>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-/* Style for the entire page */
+/* General body styling */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-}
-
-.background {
-  background-image: url('https://example.com/palm-tree-background.jpg');
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
   color: white;
   text-align: center;
 }
 
-.container {
-  padding: 50px;
+.background {
+  background-image: url('https://images.unsplash.com/photo-1490914307340-1f6364b19b76'); /* Palm tree background */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-h1 {
-  font-size: 2.5em;
-}
-
-.countdown {
-  margin-bottom: 30px;
-}
-
-#timer {
-  font-size: 2em;
+.title {
+  margin-top: 50px;
+  font-size: 3em;
   font-weight: bold;
 }
 
-.patriots-link a {
-  color: #fff;
-  font-size: 1.5em;
-  text-decoration: none;
-  background-color: #005a8c;
-  padding: 10px 20px;
-  border-radius: 5px;
-  display: inline-block;
-  margin: 20px 0;
+.calendar-section {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+  padding: 20px;
 }
 
-.patriots-link a:hover {
-  background-color: #003d5c;
+.calendar-container {
+  flex: 1;
+}
+
+.palm-tree-sidebar {
+  flex: 0.3;
+  padding-left: 20px;
+}
+
+.palm-image {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
 }
 
 .pong-game {
-  margin-top: 40px;
+  margin-top: 50px;
+  padding: 20px;
 }
+
+audio {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+// Pong Game Script
+(function() {
+  const canvas = document.getElementById("pongCanvas");
+  const ctx = canvas.getContext("2d");
+
+  // Define the game variables
+  const paddleWidth = 10, paddleHeight = 100, ballRadius = 10;
+  let ballX = canvas.width / 2, ballY = canvas.height / 2;
+  let ballSpeedX = 5, ballSpeedY = 5;
+  let leftPaddleY = (canvas.height - paddleHeight) / 2;
+  let rightPaddleY = (canvas.height - paddleHeight) / 2;
+  let leftPaddleSpeed = 0, rightPaddleSpeed = 5;
+
+  // Set up mouse movement to control the left paddle
+  document.addEventListener("mousemove", function(event) {
+    const mousePos = event.clientY - canvas.offsetTop;
+    leftPaddleY = mousePos - paddleHeight / 2;
+  });
+
+  // Draw everything to the canvas
+  function draw() {
+    // Clear the canvas and draw background
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw paddles
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, leftPaddleY, paddleWidth, paddleHeight);
+    ctx.fillRect(canvas.width - paddleWidth, rightPaddleY, paddleWidth, paddleHeight);
+
+    // Draw the ball
+    ctx.beginPath();
+    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2, false);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.closePath();
+
+    // Ball movement
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+
+    // Ball collision with top and bottom
+    if (ballY + ballSpeedY < ballRadius || ballY + ballSpeedY > canvas.height - ballRadius) {
+      ballSpeedY = -ballSpeedY;
+    }
+
+    // Ball collision with paddles
+    if (ballX + ballSpeedX < paddleWidth && ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight ||
+        ballX + ballSpeedX > canvas.width - paddleWidth && ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+      ballSpeedX = -ballSpeedX;
+    }
+
+    // Ball reset if it goes out of bounds
+    if (ballX + ballSpeedX < 0 || ballX + ballSpeedX > canvas.width) {
+      ballX = canvas.width / 2;
+      ballY = canvas.height / 2;
+      ballSpeedX = -ballSpeedX;
+    }
+
+    // Computer paddle AI
+    const computerPaddleSpeed = 5;
+    if (rightPaddleY + paddleHeight / 2 < ballY) {
+      rightPaddleY += computerPaddleSpeed;
+    } else {
+      rightPaddleY -= computerPaddleSpeed;
+    }
+  }
+
+  setInterval(draw, 1000 / 60);
+})();
