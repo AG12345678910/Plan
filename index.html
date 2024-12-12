@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
   <!-- Background with Palm Trees -->
   <div class="background">
     <!-- Website title -->
@@ -32,12 +33,6 @@
       </div>
     </div>
 
-    <!-- Hawaiian Music -->
-    <audio id="hawaiian-music" autoplay loop>
-      <source src="hawaiian-music.mp3" type="audio/mpeg">
-      Your browser does not support the audio tag.
-    </audio>
-
     <!-- Pong Game Section -->
     <div class="pong-game">
       <canvas id="pongCanvas" width="800" height="400"></canvas>
@@ -45,6 +40,7 @@
   </div>
 
   <script src="script.js"></script>
+
 </body>
 </html>
 /* General body styling */
@@ -97,14 +93,6 @@ body {
   margin-top: 50px;
   padding: 20px;
 }
-
-audio {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 10;
-}
-// Pong Game Script
 (function() {
   const canvas = document.getElementById("pongCanvas");
   const ctx = canvas.getContext("2d");
