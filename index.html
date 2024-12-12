@@ -1,91 +1,98 @@
+/florida-sun
+    index.html
+    styles.css
+    florida-sun.js
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Florida Themed Website</title>
+    <title>Florida Sun</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Florida Fun!</h1>
+        <h1>Florida Sun</h1>
     </header>
-    
-    <div class="calendar-container">
-        <div class="palm-tree left"></div>
-        <div class="calendar">
-            <h2>December 2024</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sun</th>
-                        <th>Mon</th>
-                        <th>Tue</th>
-                        <th>Wed</th>
-                        <th>Thu</th>
-                        <th>Fri</th>
-                        <th>Sat</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>2</td>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                    </tr>
-                    <tr>
-                        <td>8</td>
-                        <td>9</td>
-                        <td>10</td>
-                        <td>11</td>
-                        <td>12</td>
-                        <td>13</td>
-                        <td>14</td>
-                    </tr>
-                    <tr>
-                        <td>15</td>
-                        <td>16</td>
-                        <td>17</td>
-                        <td>18</td>
-                        <td>19</td>
-                        <td>20</td>
-                        <td>21</td>
-                    </tr>
-                    <tr>
-                        <td>22</td>
-                        <td>23</td>
-                        <td>24</td>
-                        <td>25</td>
-                        <td>26</td>
-                        <td>27</td>
-                        <td>28</td>
-                    </tr>
-                    <tr>
-                        <td>29</td>
-                        <td>30</td>
-                        <td>31</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+
+    <!-- Palm Tree themed Calendar -->
+    <section class="calendar-section">
+        <div class="calendar-container">
+            <div class="palm-tree left"></div>
+            <div class="calendar">
+                <h2>December 2024</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                            <td>11</td>
+                            <td>12</td>
+                            <td>13</td>
+                            <td>14</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td>16</td>
+                            <td>17</td>
+                            <td>18</td>
+                            <td>19</td>
+                            <td>20</td>
+                            <td>21</td>
+                        </tr>
+                        <tr>
+                            <td>22</td>
+                            <td>23</td>
+                            <td>24</td>
+                            <td>25</td>
+                            <td>26</td>
+                            <td>27</td>
+                            <td>28</td>
+                        </tr>
+                        <tr>
+                            <td>29</td>
+                            <td>30</td>
+                            <td>31</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="palm-tree right"></div>
         </div>
-        <div class="palm-tree right"></div>
-    </div>
+    </section>
 
-    <!-- Pong Game -->
-    <div class="pong-container">
-        <h2>Pong Game</h2>
-        <canvas id="pongCanvas"></canvas>
-    </div>
+    <!-- Game Section -->
+    <section class="game-section">
+        <h2>Play Florida Sun!</h2>
+        <canvas id="gameCanvas"></canvas>
+    </section>
 
-    <script src="pong.js"></script>
+    <script src="florida-sun.js"></script>
 </body>
 </html>
 * {
@@ -96,181 +103,192 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #87CEEB; /* Sky Blue */
-    color: #fff;
+    background-color: #87CEEB; /* Light sky blue */
+    color: white;
     text-align: center;
 }
 
 header {
     background-color: #FFD700; /* Gold */
     padding: 20px;
-    font-size: 2em;
+    font-size: 2.5em;
+    text-transform: uppercase;
+}
+
+.calendar-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
 }
 
 .calendar-container {
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 40px;
 }
 
 .palm-tree {
     position: absolute;
     width: 100px;
     height: 150px;
-    background-image: url('https://example.com/palm-tree.png');
+    background-image: url('https://www.example.com/palm-tree.png');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 }
 
 .left {
-    left: 0;
+    left: -50px;
     bottom: 0;
 }
 
 .right {
-    right: 0;
+    right: -50px;
     bottom: 0;
 }
 
 .calendar {
-    background-color: #fff;
-    border-radius: 15px;
+    background-color: white;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
-    font-size: 1.5em;
-    margin-bottom: 10px;
+    font-size: 2em;
 }
 
 table {
     width: 100%;
     table-layout: fixed;
+    margin-top: 20px;
 }
 
 th, td {
     padding: 10px;
     text-align: center;
-}
-
-th {
-    background-color: #FFD700;
+    background-color: #FFD700; /* Gold */
 }
 
 td {
     background-color: #f0f0f0;
 }
 
-.pong-container {
+.game-section {
     margin-top: 50px;
 }
 
-#pongCanvas {
-    background-color: black;
-    border: 2px solid white;
+#gameCanvas {
+    background-color: #f4a300; /* Florida Sun color */
+    border: 3px solid white;
+    display: block;
+    margin: 0 auto;
 }
-const canvas = document.getElementById('pongCanvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-// Set canvas dimensions
+// Set canvas size
 canvas.width = 800;
 canvas.height = 400;
 
-// Create the pong paddle
-const paddleWidth = 10, paddleHeight = 100;
-let paddle1Y = (canvas.height - paddleHeight) / 2, paddle2Y = (canvas.height - paddleHeight) / 2;
-let paddleSpeed = 5;
+// Player settings
+let player = {
+    x: 50,
+    y: canvas.height / 2,
+    size: 30,
+    speed: 3,
+    dx: 0,
+    dy: 0
+};
 
-// Create the pong ball
-const ballSize = 10;
-let ballX = canvas.width / 2, ballY = canvas.height / 2, ballSpeedX = 5, ballSpeedY = 5;
+// Obstacle settings
+let obstacles = [];
+let obstacleSpeed = 2;
 
-// Draw the paddles
-function drawPaddle(x, y) {
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(x, y, paddleWidth, paddleHeight);
+// Create player
+function drawPlayer() {
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(player.x, player.y, player.size, player.size);
 }
 
-// Draw the ball
-function drawBall() {
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(ballX, ballY, ballSize, ballSize);
+// Move player
+function movePlayer() {
+    player.x += player.dx;
+    player.y += player.dy;
 }
 
-// Move the paddles
-function movePaddle() {
-    if (upPressed && paddle1Y > 0) {
-        paddle1Y -= paddleSpeed;
-    }
-    if (downPressed && paddle1Y + paddleHeight < canvas.height) {
-        paddle1Y += paddleSpeed;
-    }
-    if (wPressed && paddle2Y > 0) {
-        paddle2Y -= paddleSpeed;
-    }
-    if (sPressed && paddle2Y + paddleHeight < canvas.height) {
-        paddle2Y += paddleSpeed;
+// Create obstacles
+function createObstacles() {
+    if (Math.random() < 0.02) {
+        let obstacleY = Math.random() * (canvas.height - 30);
+        obstacles.push({
+            x: canvas.width,
+            y: obstacleY,
+            width: 30,
+            height: 30
+        });
     }
 }
 
-// Move the ball
-function moveBall() {
-    ballX += ballSpeedX;
-    ballY += ballSpeedY;
-
-    // Ball collision with top/bottom walls
-    if (ballY <= 0 || ballY + ballSize >= canvas.height) {
-        ballSpeedY = -ballSpeedY;
+// Move obstacles
+function moveObstacles() {
+    for (let i = 0; i < obstacles.length; i++) {
+        obstacles[i].x -= obstacleSpeed;
+        if (obstacles[i].x < 0) {
+            obstacles.splice(i, 1);
+        }
     }
+}
 
-    // Ball collision with paddles
-    if (ballX <= paddleWidth && ballY >= paddle1Y && ballY <= paddle1Y + paddleHeight || 
-        ballX + ballSize >= canvas.width - paddleWidth && ballY >= paddle2Y && ballY <= paddle2Y + paddleHeight) {
-        ballSpeedX = -ballSpeedX;
+// Draw obstacles
+function drawObstacles() {
+    for (let i = 0; i < obstacles.length; i++) {
+        ctx.fillStyle = "red";
+        ctx.fillRect(obstacles[i].x, obstacles[i].y, obstacles[i].width, obstacles[i].height);
     }
+}
 
-    // Ball out of bounds (reset)
-    if (ballX <= 0 || ballX + ballSize >= canvas.width) {
-        ballX = canvas.width / 2;
-        ballY = canvas.height / 2;
-        ballSpeedX = -ballSpeedX;
+// Collision detection
+function detectCollisions() {
+    for (let i = 0; i < obstacles.length; i++) {
+        if (
+            player.x < obstacles[i].x + obstacles[i].width &&
+            player.x + player.size > obstacles[i].x &&
+            player.y < obstacles[i].y + obstacles[i].height &&
+            player.y + player.size > obstacles[i].y
+        ) {
+            alert("Game Over!");
+            resetGame();
+        }
     }
 }
 
 // Keyboard controls
-let upPressed = false, downPressed = false, wPressed = false, sPressed = false;
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowUp') upPressed = true;
-    if (e.key === 'ArrowDown') downPressed = true;
-    if (e.key === 'w') wPressed = true;
-    if (e.key === 's') sPressed = true;
+document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp") player.dy = -player.speed;
+    if (e.key === "ArrowDown") player.dy = player.speed;
+    if (e.key === "ArrowLeft") player.dx = -player.speed;
+    if (e.key === "ArrowRight") player.dx = player.speed;
 });
 
-document.addEventListener('keyup', (e) => {
-    if (e.key === 'ArrowUp') upPressed = false;
-    if (e.key === 'ArrowDown') downPressed = false;
-    if (e.key === 'w') wPressed = false;
-    if (e.key === 's') sPressed = false;
+document.addEventListener("keyup", (e) => {
+    if (e.key === "ArrowUp" || e.key === "ArrowDown") player.dy = 0;
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") player.dx = 0;
 });
 
-// Update the game
-function update() {
-    movePaddle();
-    moveBall();
-    draw();
+// Reset the game
+function resetGame() {
+    player.x = 50;
+    player.y = canvas.height / 2;
+    obstacles = [];
 }
 
-// Draw everything
-function draw() {
+// Update game elements
+function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawPaddle(0, paddle1Y);
-    drawPaddle(canvas.width - paddleWidth, paddle2Y);
-    drawBall();
+    movePlayer();
+    createObstacles();
+    moveObstacles();
+    drawPlayer();
+    drawObstacles();
+    detectCollisions();
 }
 
 // Game loop
