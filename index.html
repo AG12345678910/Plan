@@ -4,181 +4,225 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sunshine Time</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Welcome to Sunshine Time</h1>
-        <div class="palm-tree">
-            🌴
-        </div>
+        <h1>Sunshine Time</h1>
     </header>
-
-    <section class="calendar">
-        <h2>Palm Tree Calendar</h2>
-        <div id="calendar"></div>
+    
+    <section id="calendar">
+        <h2>December 2024 Calendar</h2>
+        <div id="calendar-container"></div>
     </section>
-
-    <section class="pong-game">
+    
+    <section id="pong-game">
         <h2>Pong Game</h2>
-        <div id="pong-container"></div>
+        <canvas id="pong" width="600" height="400"></canvas>
     </section>
-
-    <script src="calendar.js"></script>
+    
     <script src="pong.js"></script>
 </body>
 </html>
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffecb3;
-    color: #2e7d32;
+    background-color: #f0f8ff;
     text-align: center;
-    margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 header {
-    background-color: #ff9800;
+    background-color: #ffeb3b;
     padding: 20px;
+    border-radius: 10px;
 }
 
 h1 {
-    font-size: 36px;
+    color: #ff5722;
 }
 
-.palm-tree {
-    font-size: 80px;
+#calendar {
+    margin: 20px;
 }
 
-h2 {
-    color: #f44336;
+#pong-game {
+    margin-top: 30px;
 }
 
-.calendar {
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+canvas {
+    border: 2px solid #000;
 }
+const canvas = document.getElementById("pong");
+const ctx = canvas.getContext("2d");
 
-.pong-game {
-    margin-top: 40px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-// Simple JavaScript Calendar
-const calendarDiv = document.getElementById('calendar');
-const date = new Date();
-const month = date.getMonth();
-const year = date.getFullYear();
-
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-function renderCalendar(month, year) {
-    const firstDay = new Date(year, month).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
-    let calendarHTML = `<h3>${months[month]} ${year}</h3><table><tr>`;
-
-    for (let i = 0; i < 7; i++) {
-        calendarHTML += `<th>${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i]}</th>`;
-    }
-
-    calendarHTML += `</tr><tr>`;
-
-    for (let i = 0; i < firstDay; i++) {
-        calendarHTML += `<td></td>`;
-    }
-
-    for (let day = 1; day <= lastDate; day++) {
-        if ((firstDay + day - 1) % 7 === 0 && day !== 1) {
-            calendarHTML += `</tr><tr>`;
-        }
-        calendarHTML += `<td>${day}</td>`;
-    }
-
-    calendarHTML += `</tr></table>`;
-    calendarDiv.innerHTML = calendarHTML;
-}
-
-renderCalendar(month, year);
-// Simple Pong Game in JavaScript
-const canvas = document.createElement('canvas');
-canvas.width = 600;
-canvas.height = 400;
-document.getElementById('pong-container').appendChild(canvas);
-const ctx = canvas.getContext('2d');
-
-// Paddle
 const paddleWidth = 10, paddleHeight = 100;
-const leftPaddle = { x: 0, y: canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 4 };
-const rightPaddle = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, width: paddleWidth, height: paddleHeight, dy: 4 };
+const ballRadius = 10;
 
-// Ball
-const ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 10, speedX: 4, speedY: 4 };
+let paddle1Y = (canvas.height - paddleHeight) / 2;
+let paddle2Y = (canvas.height - paddleHeight) / 2;
+let ballX = canvas.width / 2;
+let ballY = canvas.height / 2;
+let ballSpeedX = 5;
+let ballSpeedY = 5;
+let paddle1Speed = 0;
+let paddle2Speed = 0;
 
-function drawPaddle(paddle) {
-    ctx.fillStyle = "#4caf50";
-    ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+    if (e.key == "ArrowUp") paddle2Speed = -7;
+    else if (e.key == "ArrowDown") paddle2Speed = 7;
+    if (e.key == "w") paddle1Speed = -7;
+    else if (e.key == "s") paddle1Speed = 7;
 }
 
-function drawBall() {
+function keyUpHandler(e) {
+    if (e.key == "ArrowUp" || e.key == "ArrowDown") paddle2Speed = 0;
+    if (e.key == "w" || e.key == "s") paddle1Speed = 0;
+}
+
+function movePaddles() {
+    paddle1Y += paddle1Speed;
+    paddle2Y += paddle2Speed;
+
+    if (paddle1Y < 0) paddle1Y = 0;
+    if (paddle1Y + paddleHeight > canvas.height) paddle1Y = canvas.height - paddleHeight;
+
+    if (paddle2Y < 0) paddle2Y = 0;
+    if (paddle2Y + paddleHeight > canvas.height) paddle2Y = canvas.height - paddleHeight;
+}
+
+function moveBall() {
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+
+    if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) ballSpeedY = -ballSpeedY;
+
+    if (ballX - ballRadius < paddleWidth && ballY > paddle1Y && ballY < paddle1Y + paddleHeight) ballSpeedX = -ballSpeedX;
+    if (ballX + ballRadius > canvas.width - paddleWidth && ballY > paddle2Y && ballY < paddle2Y + paddleHeight) ballSpeedX = -ballSpeedX;
+
+    if (ballX - ballRadius < 0 || ballX + ballRadius > canvas.width) {
+        ballX = canvas.width / 2;
+        ballY = canvas.height / 2;
+        ballSpeedX = -ballSpeedX;
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ff5722";
+    ctx.fillRect(0, paddle1Y, paddleWidth, paddleHeight);
+    ctx.fillRect(canvas.width - paddleWidth, paddle2Y, paddleWidth, paddleHeight);
+
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#ff9800";
+    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffeb3b";
     ctx.fill();
     ctx.closePath();
 }
 
-function movePaddles() {
-    document.addEventListener('keydown', function(e) {
-        if (e.key === "ArrowUp" && rightPaddle.y > 0) {
-            rightPaddle.y -= rightPaddle.dy;
-        } else if (e.key === "ArrowDown" && rightPaddle.y < canvas.height - paddleHeight) {
-            rightPaddle.y += rightPaddle.dy;
-        } else if (e.key === "w" && leftPaddle.y > 0) {
-            leftPaddle.y -= leftPaddle.dy;
-        } else if (e.key === "s" && leftPaddle.y < canvas.height - paddleHeight) {
-            leftPaddle.y += leftPaddle.dy;
-        }
-    });
-}
-
-function updateBall() {
-    ball.x += ball.speedX;
-    ball.y += ball.speedY;
-
-    if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
-        ball.speedY = -ball.speedY;
-    }
-
-    if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
-        ball.x = canvas.width / 2;
-        ball.y = canvas.height / 2;
-    }
-
-    if (ball.x - ball.radius < leftPaddle.x + leftPaddle.width && ball.y > leftPaddle.y && ball.y < leftPaddle.y + leftPaddle.height) {
-        ball.speedX = -ball.speedX;
-    }
-
-    if (ball.x + ball.radius > rightPaddle.x && ball.y > rightPaddle.y && ball.y < rightPaddle.y + rightPaddle.height) {
-        ball.speedX = -ball.speedX;
-    }
-}
-
-function gameLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawPaddle(leftPaddle);
-    drawPaddle(rightPaddle);
-    drawBall();
+function update() {
     movePaddles();
-    updateBall();
-    requestAnimationFrame(gameLoop);
+    moveBall();
+    draw();
+    requestAnimationFrame(update);
 }
 
-gameLoop();
-git add .
-git commit -m "Initial commit"
-git push origin main
+update();
+function createCalendar() {
+    const container = document.getElementById("calendar-container");
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    let calendarHTML = `<h3>${months[month]} ${year}</h3><table><tr>`;
+    
+    for (let i = 0; i < 7; i++) {
+        calendarHTML += `<th>${["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][i]}</th>`;
+    }
+    calendarHTML += "</tr><tr>";
+
+    for (let i = 0; i < firstDay; i++) {
+        calendarHTML += "<td></td>";
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+        if ((firstDay + day - 1) % 7 === 0 && day !== 1) {
+            calendarHTML += "</tr><tr>";
+        }
+        calendarHTML += `<td>${day}</td>`;
+    }
+
+    calendarHTML += "</tr></table>";
+    container.innerHTML = calendarHTML;
+}
+
+createCalendar();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunshine Time</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Sunshine Time</h1>
+        <img class="palm-tree" src="palm-tree.png" alt="Palm Tree">
+    </header>
+    
+    <section id="calendar">
+        <h2>December 2024 Calendar</h2>
+        <div id="calendar-container"></div>
+    </section>
+    
+    <section id="pong-game">
+        <h2>Pong Game</h2>
+        <canvas id="pong" width="600" height="400"></canvas>
+    </section>
+    
+    <script src="pong.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    text-align: center;
+    padding: 20px;
+}
+
+header {
+    background-color: #ffeb3b;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+h1 {
+    color: #ff5722;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.palm-tree {
+    height: 50px;
+    width: auto;
+}
+
+#calendar {
+    margin: 20px;
+}
+
+#pong-game {
+    margin-top: 30px;
+}
+
+canvas {
+    border: 2px solid #000;
+}
